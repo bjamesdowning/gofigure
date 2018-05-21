@@ -12,7 +12,6 @@ import (
 //user 'export PORT=<port> to set
 func main() {
 	http.HandleFunc("/", index)
-	http.HandleFunc("/api/echo", echo)
 	http.HandleFunc("/api/books", api.BooksHandler)
 	http.HandleFunc("/api/books/", api.BookHandler)
 	http.ListenAndServe(port(), nil)
@@ -30,7 +29,7 @@ func port() string {
 //responds with http code 200 and message
 func index(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
-	fmt.Fprintf(w, "Cloud native go course on %s", os.Getenv("PORT"))
+	fmt.Fprintf(w, "Cloud native go course on %s.", os.Getenv("PORT"))
 }
 
 //echos query sent in URL, as in "<server:port>/api/echo?message=Some+Message+here"
