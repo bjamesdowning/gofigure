@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 
@@ -13,6 +14,14 @@ import (
 var books = map[string]models.Book{
 	"01234": models.Book{Title: "Cloud Native", Author: "Writer", ISBN: "01234"},
 	"56789": models.Book{Title: "Test Book Two", Author: "Second Author", ISBN: "56789"},
+}
+
+//echos query sent in URL, as in "<server:port>/api/echo?message=Some+Message+here"
+func Echo(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	message := r.URL.Query()["message"][0]
+
+	w.Header().Add("Content-Type", "text/plain")
+	fmt.Fprintf(w, message)
 }
 
 //FromJSON for unmarshaling
