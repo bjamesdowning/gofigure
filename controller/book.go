@@ -1,4 +1,4 @@
-package api
+package controller
 
 import (
 	"encoding/json"
@@ -6,26 +6,10 @@ import (
 	"net/http"
 )
 
-//Book type
-type Book struct {
-	Title  string `json:"title"`
-	Author string `json:"author"`
-	ISBN   string `json:"isbn"`
-}
-
 //create sample books
 var books = map[string]Book{
 	"01234": Book{Title: "Cloud Native", Author: "Writer", ISBN: "01234"},
 	"56789": Book{Title: "Test Book Two", Author: "Second Author", ISBN: "56789"},
-}
-
-//ToJSON for marshaling
-func (b Book) ToJSON() []byte {
-	ToJSON, err := json.Marshal(b)
-	if err != nil {
-		panic(err)
-	}
-	return ToJSON
 }
 
 //FromJSON for unmarshaling
