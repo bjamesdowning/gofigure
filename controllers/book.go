@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/bjamesdowning/web2mongo/models"
+	"github.com/julienschmidt/httprouter"
 )
 
 //create sample books
@@ -36,7 +37,7 @@ func AllBooks() []models.Book {
 }
 
 //BooksHandler acts as handler for book endpoint for all books
-func BooksHandler(w http.ResponseWriter, r *http.Request) {
+func BooksHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	switch method := r.Method; method {
 	case http.MethodGet:
 		books := AllBooks()
@@ -61,7 +62,7 @@ func BooksHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 //BookHandler function takes care of single book requests
-func BookHandler(w http.ResponseWriter, r *http.Request) {
+func BookHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	isbn := r.URL.Path[len("/api/books/"):]
 
 	switch method := r.Method; method {
