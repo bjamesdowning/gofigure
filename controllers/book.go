@@ -4,17 +4,19 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
+
+	"github.com/bjamesdowning/web2mongo/models"
 )
 
 //create sample books
-var books = map[string]Book{
-	"01234": Book{Title: "Cloud Native", Author: "Writer", ISBN: "01234"},
-	"56789": Book{Title: "Test Book Two", Author: "Second Author", ISBN: "56789"},
+var books = map[string]models.Book{
+	"01234": models.Book{Title: "Cloud Native", Author: "Writer", ISBN: "01234"},
+	"56789": models.Book{Title: "Test Book Two", Author: "Second Author", ISBN: "56789"},
 }
 
 //FromJSON for unmarshaling
-func FromJSON(d []byte) Book {
-	book := Book{}
+func FromJSON(d []byte) models.Book {
+	book := models.Book{}
 	err := json.Unmarshal(d, &book)
 	if err != nil {
 		panic(err)
@@ -23,8 +25,8 @@ func FromJSON(d []byte) Book {
 }
 
 //AllBooks retrieves all books
-func AllBooks() []Book {
-	values := make([]Book, len(books))
+func AllBooks() []models.Book {
+	values := make([]models.Book, len(books))
 	var index int
 	for _, book := range books {
 		values[index] = book
@@ -92,7 +94,7 @@ func BookHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 //CreateBook creates a new book if it doesn't exist
-func CreateBook(b Book) (string, bool) {
+func CreateBook(b models.Book) (string, bool) {
 	_, exists := books[b.ISBN]
 	if exists {
 		return "", false
@@ -111,13 +113,13 @@ func writeJSON(w http.ResponseWriter, i interface{}) {
 }
 
 //GetBook finds book in map based on key of isbn
-func GetBook(isbn string) (Book, bool) {
+func GetBook(isbn string) (models.Book, bool) {
 	book, found := books[isbn]
 	return book, found
 }
 
 //UpdateBook edits a book within the map
-func UpdateBook(isbn string, b Book) bool {
+func UpdateBook(isbn string, b models.Book) bool {
 	_, exists := books[isbn]
 	if exists {
 		books[isbn] = b
