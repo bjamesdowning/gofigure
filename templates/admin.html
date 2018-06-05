@@ -16,10 +16,10 @@
     <br> {{end}}
     <a href="/">Index</a>
     <br>
-    <form action="/admin/cumulus">
-        <button type="submit">
-            <i>Interface statistics</i>
-        </button>
+    <form action="/admin/cumulus" method="POST">
+        <input type="text" name="ipaddr" placeholder="IP Address(x.x.x.x)" required>
+        <br />
+        <input type="submit" value="Interface Stats">
     </form>
     <br>
     <h3>

@@ -171,7 +171,9 @@ func cumulusPost(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Only Admins Allowed", http.StatusForbidden)
 		return
 	}
-	cmlsRes := cumulusAction(u)
+
+	ipAddr := r.FormValue("ipaddr")
+	cmlsRes := cumulusAction(u, ipAddr)
 	fmt.Fprint(w, string(cmlsRes))
 }
 
@@ -217,11 +219,11 @@ func loggedIn(r *http.Request) bool {
 	return ok
 }
 
-func cumulusAction(u user) []byte {
+func cumulusAction(u user, ip string) []byte {
 	tr := &http.Transport{
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 	}
-	url := "https://192.168.198.128:8080/nclu/v1/rpc/"
+	url := "https://" + ip + ":8080/nclu/v1/rpc/"
 	jsonStr := []byte(`{"cmd": "show counters json"}`)
 	client := &http.Client{Transport: tr}
 	req, _ := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
