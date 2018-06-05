@@ -1,7 +1,7 @@
 Gofigure: 
 
 Learning Go and how to interact with network infrastructure devices. Gofigure will serve as a front end 'console' to allow
-RESTful calls to various boxes. Firstly, using the HTTP (nginx) API provided by Cumulus Linux. Eventuall I'd like to
+RESTful calls to various boxes. Firstly, using the HTTP (nginx) API provided by Cumulus Linux. Eventually I'd like to
 incorporate SSH connections to legacy gear. 
 
 First iteration, this webapp is very basic allowing a user to create an account (stored only in memory) and on the admin
