@@ -1,7 +1,11 @@
 package main
 
 import (
+	"bytes"
+	"crypto/tls"
+	"fmt"
 	"html/template"
+	"io/ioutil"
 	"net/http"
 
 	"golang.org/x/crypto/bcrypt"
@@ -30,7 +34,8 @@ func main() {
 	http.HandleFunc("/login", login)
 	http.HandleFunc("/logout", logout)
 	http.HandleFunc("/signup", signUp)
-	http.HandleFunc("/adminhome", adminHome)
+	http.HandleFunc("/admin", adminHome)
+	http.HandleFunc("/admin/cumulus", cumulusPost)
 	http.HandleFunc("/userhome", userHome)
 	http.Handle("/favicon.ico", http.NotFoundHandler())
 	http.ListenAndServe(":8080", nil)
@@ -70,10 +75,10 @@ func login(w http.ResponseWriter, r *http.Request) {
 		dbSessions[c.Value] = email
 
 		if u.Role == "admin" {
-			http.Redirect(w, r, "/adminhome", http.StatusSeeOther)
+			http.Redirect(w, r, "/admin", http.StatusSeeOther)
 			return
 		} else if u.Role == "user" {
-			http.Redirect(w, r, "/userhome", http.StatusSeeOther)
+			http.Redirect(w, r, "/user", http.StatusSeeOther)
 			return
 		}
 	}
@@ -135,10 +140,10 @@ func signUp(w http.ResponseWriter, r *http.Request) {
 		dbSessions[c.Value] = email
 		dbUsers[email] = u
 		if u.Role == "admin" {
-			http.Redirect(w, r, "/adminhome", http.StatusSeeOther)
+			http.Redirect(w, r, "/admin", http.StatusSeeOther)
 			return
 		} else if u.Role == "user" {
-			http.Redirect(w, r, "/userhome", http.StatusSeeOther)
+			http.Redirect(w, r, "/user", http.StatusSeeOther)
 			return
 		}
 	}
@@ -158,6 +163,16 @@ func adminHome(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	tmpl.ExecuteTemplate(w, "admin.html", u)
+}
+
+func cumulusPost(w http.ResponseWriter, r *http.Request) {
+	u := getUser(w, r)
+	if u.Role != "admin" {
+		http.Error(w, "Only Admins Allowed", http.StatusForbidden)
+		return
+	}
+	cmlsRes := cumulusAction(u)
+	fmt.Fprint(w, string(cmlsRes))
 }
 
 func userHome(w http.ResponseWriter, r *http.Request) {
@@ -200,4 +215,22 @@ func loggedIn(r *http.Request) bool {
 	email := dbSessions[c.Value]
 	_, ok := dbUsers[email]
 	return ok
+}
+
+func cumulusAction(u user) []byte {
+	tr := &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+	}
+	url := "https://192.168.198.128:8080/nclu/v1/rpc/"
+	jsonStr := []byte(`{"cmd": "show counters json"}`)
+	client := &http.Client{Transport: tr}
+	req, _ := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
+	req.SetBasicAuth(u.Fname, u.Lname)
+	res, err := client.Do(req)
+	if err != nil {
+		fmt.Println(err)
+	}
+	defer res.Body.Close()
+	body, _ := ioutil.ReadAll(res.Body)
+	return body
 }

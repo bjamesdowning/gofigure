@@ -9,13 +9,19 @@
 
 <body>
     <h2>ADMIN ONLY:</h2>
-    <br /> {{if .Email}} Email {{.Email}}
-    <br /> First Name {{.Fname}}
-    <br /> Last Name {{.Lname}}
-    <br /> Role: {{.Role}}
-    <br /> {{end}}
-    <a href="/">Home</a>
-    <br />
+    <br> {{if .Email}} Email {{.Email}}
+    <br> First Name {{.Fname}}
+    <br> Last Name {{.Lname}}
+    <br> Role: {{.Role}}
+    <br> {{end}}
+    <a href="/">Index</a>
+    <br>
+    <form action="/admin/cumulus">
+        <button type="submit">
+            <i>Interface statistics</i>
+        </button>
+    </form>
+    <br>
     <h3>
         <i>
             <a href="/logout">Logout</a>
