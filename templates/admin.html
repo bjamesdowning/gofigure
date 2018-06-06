@@ -4,29 +4,46 @@
 <head>
     <meta charset="UTF-8">
     <!-- Billy Downing -->
-    <title>Admin</title>
+    <title>GoFigure</title>
 </head>
+<header>
+    <nav>
+        {{if .Email}}
+        <button>
+            <a href="/logout">Logout </a>
+        </button>
+        <button>
+            <a href={{.Role}}>Home </a>
+        </button>
+        <button>
+            <a href="/">Index </a>
+        </button>
+        {{end}}
+    </nav>
+</header>
 
 <body>
-    <h2>ADMIN ONLY:</h2>
-    <br> {{if .Email}} Email {{.Email}}
-    <br> First Name {{.Fname}}
-    <br> Last Name {{.Lname}}
+    <br>{{if .Email}} Email: {{.Email}}
+    <br> First Name: {{.Fname}}
+    <br> Last Name: {{.Lname}}
     <br> Role: {{.Role}}
     <br> {{end}}
-    <a href="/">Index</a>
     <br>
-    <form action="/admin/cumulus" method="POST">
-        <input type="text" name="ipaddr" placeholder="IP Address(x.x.x.x)" required>
-        <br />
-        <input type="submit" value="Interface Stats">
-    </form>
-    <br>
-    <h3>
-        <i>
-            <a href="/logout">Logout</a>
-        </i>
-    </h3>
+    <fieldset>
+        <legend>Command Set</legend>
+        <form action="/admin/cumulus" method="POST">
+            <p>
+                Device Type:
+                <select name="device">
+                    <option value="cumulus">Cumulus Linux</option>
+                </select>
+                <br>
+                <input type="text" name="ipaddr" placeholder="IP Address(x.x.x.x)" required>
+                <br>
+                <input type="submit" value="Interface Stats">
+            </p>
+        </form>
+    </fieldset>
 </body>
 
 </html>

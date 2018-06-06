@@ -4,24 +4,29 @@
 <head>
     <meta charset="UTF-8">
     <!-- Billy Downing -->
-    <title>GoWeb</title>
+    <title>GoFigure</title>
 </head>
+<header>
+    <nav>
+        {{if .Email}}
+        <button>
+            <a href="/logout">Logout </a>
+        </button>
+        <button>
+            <a href={{.Role}}>Home </a>
+        </button>
+        <button>
+            <a href="/">Index </a>
+        </button>
+        {{end}}
+    </nav>
+</header>
 
 <body>
-    <br />{{if .Email}}
-    <br />
+    <br>{{if .Email}}
+    <br>
     <h2>Welcome, {{.Fname}} {{.Lname}} </h2>
-    <br />
-    <h3>
-        <i>
-            <a href="/logout">Logout</a>
-        </i>
-        <br>
-        <i>
-            <a href={{.Role}}>Home</a>
-        </i>
-    </h3>
-    {{end}}
+    <br> {{end}}
 
     <fieldset>
         <legend>Sign In</legend>
