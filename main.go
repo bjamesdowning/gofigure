@@ -10,8 +10,15 @@ import (
 
 	"golang.org/x/crypto/bcrypt"
 
+	"github.com/go-redis/redis"
 	"github.com/satori/go.uuid"
 )
+
+var rclnt = redis.NewClient(&redis.Options{
+	Addr:     "localhost:6379",
+	Password: "",
+	DB:       0,
+})
 
 type user struct {
 	Email string
