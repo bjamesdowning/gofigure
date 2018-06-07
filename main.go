@@ -10,6 +10,7 @@ import (
 
 	"golang.org/x/crypto/bcrypt"
 
+	"github.com/go-redis/redis"
 	"github.com/satori/go.uuid"
 )
 
@@ -20,6 +21,12 @@ type user struct {
 	Role  string
 	Pword []byte
 }
+
+var rclnt = redis.NewClient(&redis.Options{
+	Addr:     "localhost:6379",
+	Password: "",
+	DB:       0,
+})
 
 var tmpl *template.Template
 var dbSessions = map[string]string{}
@@ -235,4 +242,8 @@ func cumulusAction(u user, ip string) []byte {
 	defer res.Body.Close()
 	body, _ := ioutil.ReadAll(res.Body)
 	return body
+}
+
+func storeUser(u user) {
+
 }
