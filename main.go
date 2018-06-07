@@ -42,7 +42,6 @@ func (u *user) UnmarshalBinary(data []byte) error {
 
 var tmpl *template.Template
 var dbSessions = map[string]string{}
-var dbUsers = map[string]user{}
 
 func init() {
 	tmpl = template.Must(template.ParseGlob("templates/*"))
@@ -74,12 +73,18 @@ func login(w http.ResponseWriter, r *http.Request) {
 		email := r.FormValue("email")
 		pword := r.FormValue("password")
 
-		u, ok := dbUsers[email]
-		if !ok {
+		var u user
+		res, err := rclnt.Get(email).Result()
+		err = u.UnmarshalBinary([]byte(res))
+		if err != nil {
+			http.Error(w, "Cannot Retreive User, DB UnMarshal Error!", http.StatusInternalServerError)
+		}
+
+		if email != u.Email {
 			http.Error(w, "Username/Password Error", http.StatusForbidden)
 			return
 		}
-		err := bcrypt.CompareHashAndPassword(u.Pword, []byte(pword))
+		err = bcrypt.CompareHashAndPassword(u.Pword, []byte(pword))
 		if err != nil {
 			http.Error(w, "Username/Password Error", http.StatusForbidden)
 			return
@@ -236,7 +241,7 @@ func getUser(w http.ResponseWriter, r *http.Request) user {
 		res, err := rclnt.Get(email).Result()
 		err = u.UnmarshalBinary([]byte(res))
 		if err != nil {
-			fmt.Println("UnMarshal Err:", err)
+			http.Error(w, "Cannot Retreive User, DB UnMarshal Error!", http.StatusInternalServerError)
 		}
 
 	}
