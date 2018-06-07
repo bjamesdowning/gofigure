@@ -29,8 +29,15 @@ type user struct {
 	Pword []byte
 }
 
-func (u user) MarshalBinary() ([]byte, error) {
+func (u *user) MarshalBinary() ([]byte, error) {
 	return json.Marshal(u)
+}
+
+func (u *user) UnmarshalBinary(data []byte) error {
+	if err := json.Unmarshal(data, &u); err != nil {
+		return err
+	}
+	return nil
 }
 
 var tmpl *template.Template
@@ -159,7 +166,7 @@ func signUp(w http.ResponseWriter, r *http.Request) {
 
 		err = rclnt.Set(email, ru, 0).Err()
 		if err != nil {
-			http.Error(w, "Database SET error", http.StatusForbidden)
+			http.Error(w, "Database SET error", http.StatusInternalServerError)
 		}
 		if u.Role == "admin" {
 			http.Redirect(w, r, "/admin", http.StatusSeeOther)
@@ -226,7 +233,12 @@ func getUser(w http.ResponseWriter, r *http.Request) user {
 	//At this point, the user has a cookie
 	var u user
 	if email, ok := dbSessions[c.Value]; ok {
-		u = dbUsers[email]
+		res, err := rclnt.Get(email).Result()
+		err = u.UnmarshalBinary([]byte(res))
+		if err != nil {
+			fmt.Println("UnMarshal Err:", err)
+		}
+
 	}
 	return u
 }
@@ -237,8 +249,11 @@ func loggedIn(r *http.Request) bool {
 		return false
 	}
 	email := dbSessions[c.Value]
-	_, ok := dbUsers[email]
-	return ok
+	_, err = rclnt.Get(email).Result()
+	if err != redis.Nil {
+		return true
+	}
+	return false
 }
 
 func cumulusAction(u user, ip string) []byte {
