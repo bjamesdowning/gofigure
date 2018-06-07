@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"crypto/tls"
+	"encoding/json"
 	"fmt"
 	"html/template"
 	"io/ioutil"
@@ -26,6 +27,10 @@ type user struct {
 	Lname string
 	Role  string
 	Pword []byte
+}
+
+func (u user) MarshalBinary() ([]byte, error) {
+	return json.Marshal(u)
 }
 
 var tmpl *template.Template
@@ -125,9 +130,10 @@ func signUp(w http.ResponseWriter, r *http.Request) {
 		role := r.FormValue("role")
 		pword := r.FormValue("password")
 		//Check if username is already in the db
-		if _, ok := dbUsers[email]; ok {
+		_, err := rclnt.Get(email).Result()
+		if err != redis.Nil {
+			fmt.Println(err)
 			http.Error(w, "Username Taken", http.StatusForbidden)
-			return
 		}
 		//Create a session
 		sID, _ := uuid.NewV4()
@@ -145,7 +151,16 @@ func signUp(w http.ResponseWriter, r *http.Request) {
 		}
 		u = user{email, fname, lname, role, bs}
 		dbSessions[c.Value] = email
-		dbUsers[email] = u
+
+		ru, err := u.MarshalBinary()
+		if err != nil {
+			fmt.Println("Marshal Err:", err)
+		}
+
+		err = rclnt.Set(email, ru, 0).Err()
+		if err != nil {
+			http.Error(w, "Database SET error", http.StatusForbidden)
+		}
 		if u.Role == "admin" {
 			http.Redirect(w, r, "/admin", http.StatusSeeOther)
 			return
