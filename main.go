@@ -16,7 +16,7 @@ import (
 )
 
 var rclnt = redis.NewClient(&redis.Options{
-	Addr:     "localhost:6379",
+	Addr:     "gofigure-redis:6379",
 	Password: "",
 	DB:       0,
 })
