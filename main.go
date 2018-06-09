@@ -8,6 +8,7 @@ import (
 	"html/template"
 	"io/ioutil"
 	"net/http"
+	"os"
 
 	"golang.org/x/crypto/bcrypt"
 
@@ -16,7 +17,7 @@ import (
 )
 
 var rclnt = redis.NewClient(&redis.Options{
-	Addr:     "gofigure-redis:6379",
+	Addr:     redisDB(),
 	Password: "",
 	DB:       0,
 })
@@ -277,4 +278,18 @@ func cumulusAction(u user, ip string) []byte {
 	defer res.Body.Close()
 	body, _ := ioutil.ReadAll(res.Body)
 	return body
+}
+
+//dynamic listening port
+func redisDB() string {
+	host := os.Getenv("REDIS_HN")
+	if len(host) == 0 {
+		host = "localhost"
+	}
+	port := os.Getenv("REDIS_PT")
+	if len(port) == 0 {
+		port = "6379"
+	}
+
+	return host + ":" + port
 }

@@ -4,5 +4,8 @@ services:
     build: .
     ports:
       - '8080:8080'
+    environment:
+      - REDIS_HN=gofigure-redis
+      - REDIS_PT=6379
   gofigure-redis:
     image: 'redis:4.0-alpine'
