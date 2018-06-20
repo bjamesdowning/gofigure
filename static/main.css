@@ -1,0 +1,54 @@
+* {
+    font-family: Arial, Helvetica, sans-serif
+}
+
+.login, .signup, .commandform, .index {
+    background-color: rgb(42, 131, 248);    
+    border: none;
+    color: white;
+    text-align: center;
+    cursor: pointer;
+    width: 400px;
+    height: 300px;
+    padding: 100px 0px 0px 0px;
+    margin: 20px auto 20px auto;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+}
+
+.commandform {
+    float:left;
+    text-align: left;
+    padding: 100px 0px 0px 25px;
+}
+
+#commandheader {
+    text-align: center;
+}
+
+.greeting {
+    margin: 20px auto 20px auto;
+    float: right
+}
+
+.nav {
+    text-align: right;
+    background-color:rgb(42, 131, 248);
+    padding: 10px;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+}
+
+.nav a, .index a{
+    text-decoration: none;
+    color:white;
+}
+
+.nav li {
+    list-style: none;
+    display: inline;
+    word-spacing: 2em;
+}
+
+#smlbtn {
+    background-color: rgb(106, 163, 243);
+    width: 100%;
+}

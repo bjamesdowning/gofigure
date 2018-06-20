@@ -49,11 +49,8 @@ func init() {
 }
 
 func main() {
-	//test
-	fs := http.FileServer(http.Dir("."))
-	http.Handle("/static/", http.StripPrefix("/static", fs))
-
-	//
+	///serve css
+	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 
 	http.HandleFunc("/", index)
 	http.HandleFunc("/login", login)
