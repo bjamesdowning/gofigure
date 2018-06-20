@@ -4,33 +4,41 @@
 <head>
     <meta charset="UTF-8">
     <!-- Billy Downing -->
+    <link href="css/main.css" type="text/css" rel="stylesheet">
     <title>GoFigure</title>
+
 </head>
 <header>
-    <nav>
+    <nav class="nav">
         {{if .Email}}
-        <button>
-            <a href="/logout">Logout </a>
-        </button>
-        <button>
-            <a href={{.Role}}>Home </a>
-        </button>
-        <button>
-            <a href="/">Index </a>
-        </button>
+        <ul>
+            <li>
+                <a href="/logout">Logout </a>
+            </li>
+            <li>
+                <a href={{.Role}}>Home </a>
+            </li>
+            <li>
+                <a href="/">Index </a>
+            </li>
+        </ul>
         {{end}}
     </nav>
 </header>
 
 <body>
-    <br>{{if .Email}} Email: {{.Email}}
-    <br> First Name: {{.Fname}}
-    <br> Last Name: {{.Lname}}
-    <br> Role: {{.Role}}
-    <br> {{end}}
-    <br>
-    <fieldset>
-        <legend>Command Set</legend>
+    <div class="greeting">
+        Hello:
+        <br>{{if .Email}} Email: {{.Email}}
+        <br> First Name: {{.Fname}}
+        <br> Last Name: {{.Lname}}
+        <br> Role: {{.Role}}
+        <br> {{end}}
+        <br>
+    </div>
+    <div class="commandform">
+        <header id="commandheader">Command Set</header>
+        <br>
         <form action="/admin/cumulus" method="POST">
             <p>
                 Device Type:
@@ -38,12 +46,14 @@
                     <option value="cumulus">Cumulus Linux</option>
                 </select>
                 <br>
+                <br>
                 <input type="text" name="ipaddr" placeholder="IP Address(x.x.x.x)" required>
                 <br>
-                <input type="submit" value="Interface Stats">
+                <br>
+                <input type="submit" value="Get Interface Stats">
             </p>
         </form>
-    </fieldset>
+    </div>
 </body>
 
 </html>

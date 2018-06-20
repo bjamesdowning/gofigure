@@ -4,44 +4,55 @@
 <head>
     <meta charset="UTF-8">
     <!-- Billy Downing -->
+    <link href="css/main.css" type="text/css" rel="stylesheet">
     <title>GoFigure</title>
 </head>
 <header>
-    <nav>
+    <nav class="nav">
         {{if .Email}}
-        <button>
-            <a href="/logout">Logout </a>
-        </button>
-        <button>
-            <a href={{.Role}}>Home </a>
-        </button>
-        <button>
-            <a href="/">Index </a>
-        </button>
+        <ul>
+            <li>
+                <a href="/logout">Logout </a>
+            </li>
+            <li>
+                <a href={{.Role}}>Home </a>
+            </li>
+            <li>
+                <a href="/">Index </a>
+            </li>
+        </ul>
         {{end}}
     </nav>
 </header>
 
 <body>
-    <br>{{if .Email}}
-    <br>
-    <h2>Welcome, {{.Fname}} {{.Lname}} </h2>
-    <br> {{end}}
+    <div class="greeting">
+        <br>{{if .Email}}
+        <br>
+        <h2>Welcome, {{.Fname}} {{.Lname}} </h2>
+        <br> {{end}}
+    </div>
 
-    <fieldset>
-        <legend>Sign In</legend>
-        <h3>
-            <i>
-                <a href="/login">Login</a>
-            </i>
-        </h3>
+    <div class="index">
+        <header>Sign In</header>
+        <br>
+        <br>
+        <button id="smlbtn">
+            <a href="/login">
+                <h3>Login</a>
+            </h3>
+            </a>
+        </button>
+        <br>
+        <br>
 
-        <h3>
-            <i>
-                <a href="/signup">Signup</a>
-            </i>
-        </h3>
-    </fieldset>
+        <button id="smlbtn">
+            <a href="/signup">
+                <h3>Signup</h3>
+            </a>
+        </button>
+
+    </div>
 </body>
 
 </html>

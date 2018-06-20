@@ -45,10 +45,16 @@ var tmpl *template.Template
 var dbSessions = map[string]string{}
 
 func init() {
-	tmpl = template.Must(template.ParseGlob("templates/*"))
+	tmpl = template.Must(template.ParseGlob("templates/*.html"))
 }
 
 func main() {
+	//test
+	fs := http.FileServer(http.Dir("."))
+	http.Handle("/static/", http.StripPrefix("/static", fs))
+
+	//
+
 	http.HandleFunc("/", index)
 	http.HandleFunc("/login", login)
 	http.HandleFunc("/logout", logout)
