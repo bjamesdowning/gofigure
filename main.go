@@ -211,7 +211,10 @@ func cumulusPost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	ipAddr := r.FormValue("ipaddr")
-	cmlsRes := cumulusAction(u, ipAddr)
+	cmd := r.FormValue("cmd")
+	uname := r.FormValue("uname")
+	pword := r.FormValue("pword")
+	cmlsRes := cumulusAction(u, ipAddr, cmd, uname, pword)
 	fmt.Fprint(w, string(cmlsRes))
 }
 
@@ -265,15 +268,26 @@ func loggedIn(r *http.Request) bool {
 	return false
 }
 
-func cumulusAction(u user, ip string) []byte {
+func cumulusAction(u user, ip, cmd, uname, pword string) []byte {
 	tr := &http.Transport{
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 	}
 	url := "https://" + ip + ":8080/nclu/v1/rpc/"
-	jsonStr := []byte(`{"cmd": "show counters json"}`)
+
+	var jsonStr []byte
+	switch cmd {
+	case "Interface Stats":
+		jsonStr = []byte(`{"cmd": "show counters json"}`)
+	case "Version":
+		jsonStr = []byte(`{"cmd": "show system"}`)
+	case "Interface Config":
+		jsonStr = []byte(`{"cmd": "show interface json"}`)
+	case "Configuration":
+		jsonStr = []byte(`{"cmd": "show configuration"}`)
+	}
 	client := &http.Client{Transport: tr}
 	req, _ := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
-	req.SetBasicAuth(u.Fname, u.Lname)
+	req.SetBasicAuth(uname, pword)
 	res, err := client.Do(req)
 	if err != nil {
 		fmt.Println(err)
