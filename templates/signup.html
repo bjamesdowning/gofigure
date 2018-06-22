@@ -19,7 +19,6 @@
 </header>
 
 <body>
-    <script src="../scripts/userInput.js"></script>
     <br>
     <div class="signup">
         <header>Signup</header>
@@ -43,13 +42,23 @@
             <br>
             <input type="password" name="password" id="password" placeholder="Password" onchange='check_pass();'>
             <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm Password" onchange='check_pass();'>
+            <br>
+            <br>
             <input type="submit" name="submit" id="submit" disabled/>
-            <br>
-            <br>
-            <input type="submit">
             <br>
         </form>
     </div>
+
+    <script>
+        function check_pass() {
+            if (document.getElementById('password').value ==
+                document.getElementById('confirm_password').value) {
+                document.getElementById('submit').disabled = false;
+            } else {
+                document.getElementById('submit').disabled = true;
+            }
+        }
+    </script>
 </body>
 
 </html>
