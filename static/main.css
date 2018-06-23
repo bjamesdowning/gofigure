@@ -2,7 +2,7 @@
     font-family: Arial, Helvetica, sans-serif
 }
 
-.login, .signup, .commandform, .index .results {
+.login, .signup, .commandform, .index {
     background-color: rgb(42, 131, 248);    
     border: none;
     color: white;

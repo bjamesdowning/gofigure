@@ -12,6 +12,7 @@ if [ "docker-compose ps | grep gofigure_gofigure" ]; then
    docker-compose down
 fi
 
-sleep 5
-
+sleep 3
+docker rmi gofigure_gofigure-fe
+sleep 2
 docker-compose up -d --build
