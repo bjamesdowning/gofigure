@@ -13,7 +13,6 @@ import (
 	"golang.org/x/crypto/bcrypt"
 
 	"github.com/go-redis/redis"
-	"github.com/satori/go.uuid"
 )
 
 var rclnt = redis.NewClient(&redis.Options{
@@ -297,7 +296,7 @@ func cumulusAction(u user, ip, cmd, uname, pword string) []byte {
 	return body
 }
 
-//dynamic listening port
+// dynamic listening port
 func redisDB() string {
 	host := os.Getenv("REDIS_HN")
 	if len(host) == 0 {
